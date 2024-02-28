@@ -3,5 +3,5 @@
 .vscode/
 __pycache__/
 /venv_linux/
-/venv_win/
-/venv_iot/
+/venv_be/
+/venv_fe/
