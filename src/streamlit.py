@@ -14,13 +14,6 @@ st.subheader("Just enter variabel below then click Predict button :sunglasses:")
 # Create form of input
 with st.form(key = "air_data_form"):
     # Create box for number input
-    temperature = st.number_input(
-        label = "1.\tEnter Temperature[C] Value:",
-        min_value = -40,
-        max_value = 125,
-        help = "Value range from -40 to 125"
-    )
-
     humidity = st.number_input(
         label = "2.\tEnter Humidity[%] Value:",
         min_value = 0,
@@ -49,13 +42,6 @@ with st.form(key = "air_data_form"):
         help = "Value range from 0 to 60000"
     )
 
-    eco2 = st.number_input(
-        label = "6.\tEnter eCO2[ppm] Value:",
-        min_value = 400,
-        max_value = 60000,
-        help = "Value range from 400 to 60000"
-    )
-
     h2 = st.number_input(
         label = "7.\tEnter Raw H2 Value:",
         min_value = 0,
@@ -77,12 +63,10 @@ with st.form(key = "air_data_form"):
     if submitted:
         # Create dict of all data in the form
         raw_data = {
-            "Temperature": temperature,
             "Humidity": humidity,
             "Pressure": pressure,
             "PM1": pm1,
             "TVOC": tvoc,
-            "eCO2": eco2,
             "H2": h2,
             "Ethanol": ethanol
         }

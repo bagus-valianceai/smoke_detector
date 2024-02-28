@@ -11,12 +11,10 @@ config = utils.load_config()
 model_data = utils.pickle_load(config["production_model_path"])
 
 class api_data(BaseModel):
-    Temperature : float
     Humidity : float
     Pressure : float
     PM1 : float
     TVOC : int
-    eCO2 : int
     H2 : int
     Ethanol : int
 
@@ -35,8 +33,8 @@ def predict(data: api_data):
     # Convert dtype
     data = pd.concat(
         [
-            data[config["predictors"][:4]].astype(np.float64),  # type: ignore
-            data[config["predictors"][4:]].astype(np.int64)  # type: ignore
+            data[config["predictors"][:3]].astype(np.float64),  # type: ignore
+            data[config["predictors"][3:]].astype(np.int64)  # type: ignore
         ],
         axis = 1
     )

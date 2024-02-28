@@ -40,6 +40,12 @@ def check_data(input_data: pd.DataFrame, config: dict, api: bool = False):
 
         assert ((min_datetime_definition < min_data_datetime) & (max_datetime_definition > max_data_datetime))
 
+        # Check range of temperature
+        assert input_data[config["float_columns"][0]].between(
+                config["range_temperature"][0],
+                config["range_temperature"][1]
+                ).sum() == len(input_data), "an error occurs in range_temperature."
+        
         # Check range of pm2.5
         assert input_data[config["float_columns"][4]].between(
                 config["range_pm25"][0],
@@ -63,6 +69,12 @@ def check_data(input_data: pd.DataFrame, config: dict, api: bool = False):
                 config["range_nc25"][0],
                 config["range_nc25"][1]
                 ).sum() == len(input_data), "an error occurs in range_nc25."
+        
+        # Check range of eco2
+        assert input_data[config["int_columns"][1]].between(
+                config["range_eco2"][0],
+                config["range_eco2"][1]
+                ).sum() == len(input_data), "an error occurs in range_eco2."
 
         # Check range of fire alarm
         assert input_data[config["int_columns"][5]].between(
@@ -73,24 +85,20 @@ def check_data(input_data: pd.DataFrame, config: dict, api: bool = False):
     else:
         # In case checking data from api
         # Last 2 column names in list of int columns are not used as predictor (CNT and Fire Alarm)
-        int_columns = config["int_columns"]
+        int_columns = copy.deepcopy(config["int_columns"])
         del int_columns[-2:]
+        del int_columns[1]
 
         # Last 4 column names in list of int columns are not used as predictor (NC2.5, NC1.0, NC0.5, and PM2.5)
-        float_columns = config["float_columns"]
+        float_columns = copy.deepcopy(config["float_columns"])
         del float_columns[-4:]
+        del float_columns[0]
 
         # Check column data types
         assert input_data.select_dtypes("int64").columns.to_list() == \
             int_columns, "an error occurs in int column(s)."
         assert input_data.select_dtypes("float64").columns.to_list() == \
             float_columns, "an error occurs in float column(s)."
-    
-    # Check range of temperature
-    assert input_data[config["float_columns"][0]].between(
-            config["range_temperature"][0],
-            config["range_temperature"][1]
-            ).sum() == len(input_data), "an error occurs in range_temperature."
     
     # Check range of humidity
     assert input_data[config["float_columns"][1]].between(
@@ -115,12 +123,6 @@ def check_data(input_data: pd.DataFrame, config: dict, api: bool = False):
             config["range_tvoc"][0],
             config["range_tvoc"][1]
             ).sum() == len(input_data), "an error occurs in range_tvoc."
-    
-    # Check range of eco2
-    assert input_data[config["int_columns"][1]].between(
-            config["range_eco2"][0],
-            config["range_eco2"][1]
-            ).sum() == len(input_data), "an error occurs in range_eco2."
     
     # Check range of raw h2
     assert input_data[config["int_columns"][2]].between(
